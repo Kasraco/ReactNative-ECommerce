@@ -1,6 +1,6 @@
-const mongoos = require("mongoose");
+const mongoose = require("mongoose");
 
-const user = new mongoos.Schema({
+const user = new mongoose.Schema({
   firstName: String,
   lastName: String,
   userName: { type: String, unique: true, require: true },
@@ -9,8 +9,8 @@ const user = new mongoos.Schema({
   phoneNumber: Number,
   isAdmin: { type: Boolean, default: false },
   address: String,
-  createAt: { type: Date, default: Date.now() },
+  createAt: { type: Date, default: Date.now },
 });
 
-const User = mongoos.model("User", user);
+const User = mongoose.model("User", user);
 module.exports = User;
