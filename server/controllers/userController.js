@@ -64,6 +64,31 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  const { userName, password } = req.body;
+
+  //validation
+
+  if (!userName || !password)
+    return res
+      .status(204)
+      .json({ success: false, message: "data is empty, please input them" });
+
+  const user = await User.findOne({ userName });
+  if (!user)
+    return res.status(304).json({
+      success: false,
+      message: `the user ${user.userName} isnot exist`,
+    });
+
+  const matchp = await hashPassword.compairPassword(password, user.password);
+  if (!match)
+    return res.status(401).json({
+      success: false,
+      message: `password is not true`,
+    });
+};
+
 const existUserName = async (userName) => {
   const existUser = await User.findOne({ userName });
   return existUser;
