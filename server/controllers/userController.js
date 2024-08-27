@@ -87,6 +87,25 @@ const login = async (req, res) => {
       success: false,
       message: `password is not true`,
     });
+
+  const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
+    expiresIn: "1d",
+  });
+
+  return res.status().json({
+    success: true,
+    user: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      isAdmin: user.isAdmin,
+    },
+    message: `Welcome ${user.userName}`,
+    token,
+  });
 };
 
 const existUserName = async (userName) => {
