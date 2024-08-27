@@ -34,9 +34,17 @@ const register = async (req, res) => {
       case !address:
         res.status(500).json({ error: "address is require" });
     }
+
+    if (existUserName(userName))
+      res.status(500).json({ success: false, message: "username is exist" });
   } catch (error) {
   } finally {
   }
+};
+
+const existUserName = async (userName) => {
+  const existUser = await User.findOne({ userName });
+  return existUser;
 };
 
 const createFirstUser = async (req, res) => {
