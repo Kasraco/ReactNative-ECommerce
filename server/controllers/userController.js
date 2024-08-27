@@ -1,8 +1,42 @@
 const User = require("../models/userModel");
+const JWT = require("jsonwebtoken");
 
 const getUsers = async (req, res) => {
   const users = await User.find().sort({ createAt: -1 });
   res.json(users);
+};
+
+const register = async (req, res) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      userName,
+      password,
+      email,
+      phoneNumber,
+      address,
+    } = req.body;
+
+    switch (true) {
+      case !firstName:
+        res.status(500).json({ error: "firstname is require" });
+      case !lastName:
+        res.status(500).json({ error: "lastName is require" });
+      case !userName:
+        res.status(500).json({ error: "userName is require" });
+      case !password:
+        res.status(500).json({ error: "password is require" });
+      case !email:
+        res.status(500).json({ error: "email is require" });
+      case !phoneNumber:
+        res.status(500).json({ error: "phoneNumber is require" });
+      case !address:
+        res.status(500).json({ error: "address is require" });
+    }
+  } catch (error) {
+  } finally {
+  }
 };
 
 const createFirstUser = async (req, res) => {
