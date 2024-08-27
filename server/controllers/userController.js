@@ -1,3 +1,4 @@
+const hashPassword = require("../helper/AuthHelper");
 const User = require("../models/userModel");
 const JWT = require("jsonwebtoken");
 
@@ -27,6 +28,8 @@ const register = async (req, res) => {
         res.status(500).json({ error: "userName is require" });
       case !password:
         res.status(500).json({ error: "password is require" });
+      case password < 6:
+        res.status(500).json({ error: "password is tiny" });
       case !email:
         res.status(500).json({ error: "email is require" });
       case !phoneNumber:
@@ -35,8 +38,27 @@ const register = async (req, res) => {
         res.status(500).json({ error: "address is require" });
     }
 
-    if (existUserName(userName))
+    if (await existUserName(userName))
       res.status(500).json({ success: false, message: "username is exist" });
+
+    const hashedPassword = hashPassword(password);
+
+    const user = await new User({
+      firstName,
+      lastName,
+      userName,
+      password: hashedPassword,
+      email,
+      address,
+      phoneNumber,
+    }).save();
+
+    return res.json({
+      status: 200,
+      success: true,
+      message: `Welcome $(user.firstName)`,
+      user,
+    });
   } catch (error) {
   } finally {
   }
@@ -62,4 +84,4 @@ const createFirstUser = async (req, res) => {
   res.status(201).json({ message: "User created successfully", user: newuser });
 };
 
-module.exports = { getUsers, createFirstUser };
+module.exports = { getUsers, createFirstUser, register };
