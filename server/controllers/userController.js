@@ -71,23 +71,25 @@ const login = async (req, res) => {
     //validation
 
     if (!userName || !password)
-      return res
+      return await res
         .status(204)
         .json({ success: false, message: "data is empty, please input them" });
 
-    const user = await User.findOne({ userName });
-    if (!user)
-      return res.status(304).json({
+    const user = await existUserName(userName);
+    if (!user) {
+      return await res.status(401).json({
         success: false,
-        message: `the user ${user.userName} isnot exist`,
+        message: `the user ${userName} isnot exist`,
       });
+    }
 
     const matchp = await hashPassword.compairPassword(password, user.password);
-    if (!matchp)
-      return res.status(401).json({
+    if (!matchp) {
+      return await res.status(401).json({
         success: false,
         message: `password is not true`,
       });
+    }
 
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
       expiresIn: "1d",
@@ -113,8 +115,13 @@ const login = async (req, res) => {
 };
 
 const existUserName = async (userName) => {
-  const existUser = await User.findOne({ userName });
-  return existUser;
+  try {
+    const existUser = await User.findOne({ userName });
+    if (existUser == null) return false;
+    return existUser;
+  } catch (error) {
+    return false;
+  }
 };
 
 const createFirstUser = async (req, res) => {
