@@ -65,47 +65,51 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { userName, password } = req.body;
+  try {
+    const { userName, password } = req.body;
 
-  //validation
+    //validation
 
-  if (!userName || !password)
-    return res
-      .status(204)
-      .json({ success: false, message: "data is empty, please input them" });
+    if (!userName || !password)
+      return res
+        .status(204)
+        .json({ success: false, message: "data is empty, please input them" });
 
-  const user = await User.findOne({ userName });
-  if (!user)
-    return res.status(304).json({
-      success: false,
-      message: `the user ${user.userName} isnot exist`,
+    const user = await User.findOne({ userName });
+    if (!user)
+      return res.status(304).json({
+        success: false,
+        message: `the user ${user.userName} isnot exist`,
+      });
+
+    const matchp = await hashPassword.compairPassword(password, user.password);
+    if (!match)
+      return res.status(401).json({
+        success: false,
+        message: `password is not true`,
+      });
+
+    const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
+      expiresIn: "1d",
     });
 
-  const matchp = await hashPassword.compairPassword(password, user.password);
-  if (!match)
-    return res.status(401).json({
-      success: false,
-      message: `password is not true`,
+    return res.status().json({
+      success: true,
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        address: user.address,
+        isAdmin: user.isAdmin,
+      },
+      message: `Welcome ${user.userName}`,
+      token,
     });
-
-  const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
-    expiresIn: "1d",
-  });
-
-  return res.status().json({
-    success: true,
-    user: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      userName: user.userName,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      address: user.address,
-      isAdmin: user.isAdmin,
-    },
-    message: `Welcome ${user.userName}`,
-    token,
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const existUserName = async (userName) => {
