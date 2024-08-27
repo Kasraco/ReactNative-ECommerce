@@ -28,7 +28,7 @@ const register = async (req, res) => {
         res.status(500).json({ error: "userName is require" });
       case !password:
         res.status(500).json({ error: "password is require" });
-      case password < 6:
+      case password.length < 6:
         res.status(500).json({ error: "password is tiny" });
       case !email:
         res.status(500).json({ error: "email is require" });
@@ -41,7 +41,7 @@ const register = async (req, res) => {
     if (await existUserName(userName))
       res.status(500).json({ success: false, message: "username is exist" });
 
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     const user = await new User({
       firstName,
@@ -52,14 +52,14 @@ const register = async (req, res) => {
       address,
       phoneNumber,
     }).save();
-
     return res.json({
       status: 200,
       success: true,
-      message: `Welcome $(user.firstName)`,
+      message: `Welcome ${user.firstName}`,
       user,
     });
   } catch (error) {
+    console.log(error);
   } finally {
   }
 };
