@@ -41,7 +41,7 @@ const register = async (req, res) => {
     if (await existUserName(userName))
       res.status(500).json({ success: false, message: "username is exist" });
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword.hashPassword(password);
 
     const user = await new User({
       firstName,
@@ -84,18 +84,18 @@ const login = async (req, res) => {
     }
 
     const matchp = await hashPassword.compairPassword(password, user.password);
+
     if (!matchp) {
       return await res.status(401).json({
         success: false,
         message: `password is not true`,
       });
     }
-
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
       expiresIn: "1d",
     });
 
-    return res.status().json({
+    return res.status(200).json({
       success: true,
       user: {
         firstName: user.firstName,
