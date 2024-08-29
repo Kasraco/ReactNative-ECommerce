@@ -178,4 +178,11 @@ const createFirstUser = async (req, res) => {
   res.status(201).json({ message: "User created successfully", user: newuser });
 };
 
-module.exports = { getUsers, createFirstUser, register, login, mobileProfile };
+module.exports = {
+  getUsers,
+  createFirstUser,
+  register,
+  login,
+  mobileProfile,
+  Manager,
+};
