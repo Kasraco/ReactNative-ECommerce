@@ -77,7 +77,7 @@ const login = async (req, res) => {
 
     const user = await existUserName(userName);
     if (!user) {
-      return await res.status(401).json({
+      return await res.status(500).json({
         success: false,
         message: `the user ${userName} isnot exist`,
       });
@@ -86,7 +86,7 @@ const login = async (req, res) => {
     const matchp = await hashPassword.compairPassword(password, user.password);
 
     if (!matchp) {
-      return await res.status(401).json({
+      return await res.status(500).json({
         success: false,
         message: `password is not true`,
       });
@@ -124,6 +124,37 @@ const existUserName = async (userName) => {
   }
 };
 
+const mobileProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.json({
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userName: user.userName,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    address: user.address,
+    user,
+  });
+};
+
+const Manager = async (req, res) => {
+  const user = User.findById(req.user._id);
+  if (user.isAdmin) {
+    res.json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      isAdmin: user.isAdmin,
+      user,
+    });
+  }
+};
+
 const createFirstUser = async (req, res) => {
   const newuser = new User({
     firstName: "Ali",
@@ -139,4 +170,4 @@ const createFirstUser = async (req, res) => {
   res.status(201).json({ message: "User created successfully", user: newuser });
 };
 
-module.exports = { getUsers, createFirstUser, register, login };
+module.exports = { getUsers, createFirstUser, register, login, mobileProfile };
