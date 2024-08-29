@@ -126,21 +126,7 @@ const existUserName = async (userName) => {
 
 const mobileProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
-  res.json({
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    userName: user.userName,
-    email: user.email,
-    phoneNumber: user.phoneNumber,
-    address: user.address,
-    user,
-  });
-};
-
-const Manager = async (req, res) => {
-  const user = User.findById(req.user._id);
-  if (user.isAdmin) {
+  try {
     res.json({
       _id: user._id,
       firstName: user.firstName,
@@ -149,9 +135,31 @@ const Manager = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       address: user.address,
-      isAdmin: user.isAdmin,
       user,
     });
+  } catch (error) {
+    res.status(400).json("Invalid User");
+  }
+};
+
+const Manager = async (req, res) => {
+  const user = User.findById(req.user._id);
+  if (user.isAdmin) {
+    try {
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        address: user.address,
+        isAdmin: user.isAdmin,
+        user,
+      });
+    } catch (error) {
+      res.status(400).json("Invalid User");
+    }
   }
 };
 
