@@ -144,8 +144,9 @@ const mobileProfile = async (req, res) => {
 
 const Manager = async (req, res) => {
   const user = User.findById(req.user._id);
-  if (user.isAdmin) {
-    try {
+
+  try {
+    if (user.isAdmin) {
       res.json({
         _id: user._id,
         firstName: user.firstName,
@@ -157,9 +158,11 @@ const Manager = async (req, res) => {
         isAdmin: user.isAdmin,
         user,
       });
-    } catch (error) {
-      res.status(400).json("Invalid User");
+    } else {
+      res.status(400).json({ message: "Invalid User" });
     }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid User" });
   }
 };
 
