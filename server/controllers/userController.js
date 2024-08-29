@@ -166,6 +166,50 @@ const Manager = async (req, res) => {
   }
 };
 
+const forgetPassword = async (req, res) => {
+  const { userName, oldpassword, password, confirmPassword } = req.body;
+
+  try {
+    //validation
+    switch (true) {
+      case !userName:
+        return res.json({ error: "username is require" });
+      case !oldpassword:
+        return res.json({ error: "oldpassword is require" });
+      case !password:
+        return res.json({ error: "password is require" });
+      case !confirmPassword:
+        return res.json({ error: "confirmPassword is require" });
+      case password != confirmPassword:
+        return res.json({ error: "password and confirmPassword not equal" });
+      case password == oldpassword:
+        return res.json({ error: "password and oldpassword is equal" });
+    }
+    const user = await User.findOne({ userName });
+
+    if (!user)
+      return res
+        .status(404)
+        .json({ succces: false, message: "user not found" });
+    else {
+      const CP = await hashPassword.compairPassword(oldpassword, user.password);
+      if (CP) {
+        const hashed = await hashPassword.hashPassword(password);
+        await User.findByIdAndUpdate(user._id, { password: hashed });
+
+        res
+          .status(201)
+          .json({ success: true, message: "change password success" });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "the OldPassword is not equal with current password",
+        });
+      }
+    }
+  } catch (error) {}
+};
+
 const createFirstUser = async (req, res) => {
   const newuser = new User({
     firstName: "Ali",
@@ -188,4 +232,5 @@ module.exports = {
   login,
   mobileProfile,
   Manager,
+  forgetPassword,
 };
