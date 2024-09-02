@@ -11,6 +11,6 @@ router.post("/login", UserController.login);
 router.get("/mobileProfile", requireSignIn, UserController.mobileProfile);
 router.get("/Manager", requireSignIn, UserController.Manager);
 router.put("/forgetPass", UserController.forgetPassword);
-router.post("/", UserController.createFirstUser);
+router.put("/upateProfile", requireSignIn, UserController.updateProfile);
 
 module.exports = router;
