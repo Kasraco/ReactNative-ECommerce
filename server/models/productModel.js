@@ -11,11 +11,11 @@ const product = new mongoose.Schema({
   quantity: Number,
   speciality: String,
   category: String,
-  pcode: Number,
+  pcode: String,
   sendingType: String,
   createAt: { type: Date, default: Date.now },
 });
 
-const Product = await mongoose.model("Product", product);
+const Product = mongoose.model("Product", product);
 
 module.exports = Product;
