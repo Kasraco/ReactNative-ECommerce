@@ -210,27 +210,43 @@ const forgetPassword = async (req, res) => {
   } catch (error) {}
 };
 
-const createFirstUser = async (req, res) => {
-  const newuser = new User({
-    firstName: "Ali",
-    lastName: "Rezaei",
-    userName: "alirezaei",
-    password: "password123",
-    email: "ali@example.com",
-    phoneNumber: 123456789,
-    address: "Tehran, Iran",
-  });
+const updateProfile = async (req, res) => {
+  const { firstName, lastName, userName, email, phoneNumber, address } =
+    req.body;
+  console.log(req.headers.authorization);
+  try {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = JWT.verify(token, process.env.JWT_SECURITY);
 
-  await newuser.save();
-  res.status(201).json({ message: "User created successfully", user: newuser });
+      const result = await User.findById(decoded._id);
+      if (!result) res.json({ message: "username notfound" });
+
+      result.firstName = firstName;
+      result.lastName = lastName;
+      result.userName = userName;
+      result.email = email;
+      result.phoneNumber = phoneNumber;
+      result.address = address;
+
+      await result.save();
+      res.status(201).json({ success: true, message: "update your profile" });
+    }
+    res.status(500).json({ success: false, message: "Your not login" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
   getUsers,
-  createFirstUser,
   register,
   login,
   mobileProfile,
   Manager,
   forgetPassword,
+  updateProfile,
 };
