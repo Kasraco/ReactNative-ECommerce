@@ -62,15 +62,35 @@ const getProductById = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const productid = req.params.id;
-  const updateProduct = req.body;
-  const result = await Product.findByIdAndUpdate(productid, updateProduct);
+  try {
+    const productid = req.params.id;
+    const updateProduct = req.body;
+    const result = await Product.findByIdAndUpdate(productid, updateProduct);
 
-  res.status(200).json({
-    success: true,
-    massage: `the ${updateProduct.title} with  pcode =  ${updateProduct.pcode} is update`,
-    result,
-  });
+    res.status(200).json({
+      success: true,
+      massage: `the ${updateProduct.title} with  pcode =  ${updateProduct.pcode} is update`,
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const result = await Product.findByIdAndDelete(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({
+      success: true,
+      massage: "the product is deleted",
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // Create Product Code
@@ -81,4 +101,10 @@ const createPCode = (len) => {
   return result.substring(0, len);
 };
 
-module.exports = { getProducts, addProduct, getProductById, update };
+module.exports = {
+  getProducts,
+  addProduct,
+  getProductById,
+  update,
+  deleteProduct,
+};
