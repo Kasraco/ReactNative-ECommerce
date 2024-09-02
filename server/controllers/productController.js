@@ -61,6 +61,18 @@ const getProductById = async (req, res) => {
   res.json(result);
 };
 
+const update = async (req, res) => {
+  const productid = req.params.id;
+  const updateProduct = req.body;
+  const result = await Product.findByIdAndUpdate(productid, updateProduct);
+
+  res.status(200).json({
+    success: true,
+    massage: `the ${updateProduct.title} with  pcode =  ${updateProduct.pcode} is update`,
+    result,
+  });
+};
+
 // Create Product Code
 const createPCode = (len) => {
   let result = "";
@@ -69,4 +81,4 @@ const createPCode = (len) => {
   return result.substring(0, len);
 };
 
-module.exports = { getProducts, addProduct, getProductById };
+module.exports = { getProducts, addProduct, getProductById, update };
