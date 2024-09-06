@@ -1,11 +1,13 @@
-import { useState } from "react";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
 function App() {
   return (
     <>
-      <h1 className="text-center text-indigo-700 text-3xl font-extrabold">
-        سلام به معرفی اپلیکیشن خوش آمدین
-      </h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
