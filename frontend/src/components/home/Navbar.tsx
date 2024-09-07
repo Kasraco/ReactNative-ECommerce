@@ -21,25 +21,25 @@ const Navbar = () => {
             <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0  lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <FaHome className="text-lg" />
-                <a href="" className="flex items-center">
+                <a href="/" className="flex items-center">
                   خانه
                 </a>
               </li>
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <VscAccount className="text-lg" />
-                <a href="" className="flex items-center">
+                <a href="/Profile" className="flex items-center">
                   پروفایل
                 </a>
               </li>
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <MdConnectWithoutContact className="text-lg" />
-                <a href="" className="flex items-center">
+                <a href="/Contact" className="flex items-center">
                   تماس باما
                 </a>
               </li>
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <BsFillInfoSquareFill className="text-lg" />
-                <a href="" className="flex items-center">
+                <a href="/About" className="flex items-center">
                   درباره ما
                 </a>
               </li>
@@ -55,40 +55,39 @@ const Navbar = () => {
               <AiOutlineMenuFold className="text-2xl text-white" />
             </span>
           </button>
-
-          {responsive ? (
-            <div className="lg:hidden">
-              <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0  lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
-                  <FaHome className="text-lg" />
-                  <a href="" className="flex items-center">
-                    خانه
-                  </a>
-                </li>
-                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
-                  <VscAccount className="text-lg" />
-                  <a href="" className="flex items-center">
-                    پروفایل
-                  </a>
-                </li>
-                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
-                  <MdConnectWithoutContact className="text-lg" />
-                  <a href="" className="flex items-center">
-                    تماس باما
-                  </a>
-                </li>
-                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
-                  <BsFillInfoSquareFill className="text-lg" />
-                  <a href="" className="flex items-center">
-                    درباره ما
-                  </a>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            ""
-          )}
         </div>
+        {responsive ? (
+          <div className="lg:hidden">
+            <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0  lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+              <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                <FaHome className="text-lg" />
+                <a href="/" className="flex items-center">
+                  خانه
+                </a>
+              </li>
+              <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                <VscAccount className="text-lg" />
+                <a href="/Profile" className="flex items-center">
+                  پروفایل
+                </a>
+              </li>
+              <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                <MdConnectWithoutContact className="text-lg" />
+                <a href="/Contact" className="flex items-center">
+                  تماس باما
+                </a>
+              </li>
+              <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                <BsFillInfoSquareFill className="text-lg" />
+                <a href="/About" className="flex items-center">
+                  درباره ما
+                </a>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          ""
+        )}
       </nav>
     </div>
   );
