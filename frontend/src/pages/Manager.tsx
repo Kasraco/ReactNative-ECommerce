@@ -1,11 +1,55 @@
 import { useState } from "react";
+import axios from "axios";
+import Api from "../api";
+import toast from "react-hot-toast";
 
 const Manager: any = () => {
   const [register, setRegister] = useState(false);
   const [login, setLogin] = useState(false);
 
-  const handleRegister = (e) => {
-    console.log("submit");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("Ahva, Iran");
+  const [message, setMessage] = useState("");
+
+  const handleRegister = async (e: any) => {
+    try {
+      e.preventDefault();
+      toast.success(<div>{firstName}</div>);
+      const config = {
+        method: "POST",
+        url: `${Api}/user/register`,
+        data: {
+          email,
+          firstName,
+          lastName,
+          userName,
+          password,
+          phoneNumber,
+          address,
+          message,
+        },
+      };
+
+      await axios(config).then((result) => {
+        setMessage(result.data.message);
+        console.log(result.data.message);
+        toast.success(<div>{result.data.message}</div>);
+        setEmail("");
+        setFirstName("");
+        setLastName("");
+        setPhoneNumber("");
+        setUserName("");
+        setPassword("");
+        setAddress("");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleLogin = (e) => {
@@ -40,7 +84,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="email"
-                    name="txtEmail"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter YourEmail"
                   />
@@ -55,7 +101,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="text"
-                    name="txtName"
+                    name="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter Your FirstName"
                   />
@@ -70,7 +118,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="text"
-                    name="txtLastName"
+                    name="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter Your LastName"
                   />
@@ -85,7 +135,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="text"
-                    name="txtUserName"
+                    name="userName"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter Your UserName"
                   />
@@ -100,7 +152,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="tel"
-                    name="txtTellNumber"
+                    name="phoneNumber"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter Your Tell Number"
                   />
@@ -114,7 +168,9 @@ const Manager: any = () => {
                   </label>
                   <input
                     type="password"
-                    name="txtPassword"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                     placeholder="Enter Your Password"
                   />
