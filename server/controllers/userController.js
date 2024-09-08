@@ -21,21 +21,21 @@ const register = async (req, res) => {
 
     switch (true) {
       case !firstName:
-        res.status(500).json({ error: "firstname is require" });
+        res.status(500).json({ message: "firstname is require" });
       case !lastName:
-        res.status(500).json({ error: "lastName is require" });
+        res.status(500).json({ message: "lastName is require" });
       case !userName:
-        res.status(500).json({ error: "userName is require" });
+        res.status(500).json({ message: "userName is require" });
       case !password:
-        res.status(500).json({ error: "password is require" });
+        res.status(500).json({ message: "password is require" });
       case password.length < 6:
-        res.status(500).json({ error: "password is tiny" });
+        res.status(500).json({ message: "password is tiny" });
       case !email:
-        res.status(500).json({ error: "email is require" });
+        res.status(500).json({ message: "email is require" });
       case !phoneNumber:
-        res.status(500).json({ error: "phoneNumber is require" });
+        res.status(500).json({ message: "phoneNumber is require" });
       case !address:
-        res.status(500).json({ error: "address is require" });
+        res.status(500).json({ message: "address is require" });
     }
 
     if (await existUserName(userName))
@@ -173,17 +173,17 @@ const forgetPassword = async (req, res) => {
     //validation
     switch (true) {
       case !userName:
-        return res.json({ error: "username is require" });
+        return res.json({ message: "username is require" });
       case !oldpassword:
-        return res.json({ error: "oldpassword is require" });
+        return res.json({ message: "oldpassword is require" });
       case !password:
-        return res.json({ error: "password is require" });
+        return res.json({ message: "password is require" });
       case !confirmPassword:
-        return res.json({ error: "confirmPassword is require" });
+        return res.json({ message: "confirmPassword is require" });
       case password != confirmPassword:
-        return res.json({ error: "password and confirmPassword not equal" });
+        return res.json({ message: "password and confirmPassword not equal" });
       case password == oldpassword:
-        return res.json({ error: "password and oldpassword is equal" });
+        return res.json({ message: "password and oldpassword is equal" });
     }
     const user = await User.findOne({ userName });
 
