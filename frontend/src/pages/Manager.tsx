@@ -15,11 +15,12 @@ const Manager: any = () => {
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("Ahva, Iran");
   const [message, setMessage] = useState("");
+  const [submit, setSubmit] = useState("");
+  const [error, setError] = useState("");
 
   const handleRegister = async (e: any) => {
     try {
       e.preventDefault();
-      toast.success(<div>{firstName}</div>);
       const config = {
         method: "POST",
         url: `${Api}/user/register`,
@@ -32,13 +33,18 @@ const Manager: any = () => {
           phoneNumber,
           address,
           message,
+          submit,
+          error,
         },
       };
 
       await axios(config).then((result) => {
         setMessage(result.data.message);
-        console.log(result.data.message);
-        toast.success(<div>{result.data.message}</div>);
+
+        result.data.error
+          ? toast.error(<div>{result.data.error}</div>)
+          : toast.success(<div>{result.data.message}</div>);
+
         setEmail("");
         setFirstName("");
         setLastName("");
