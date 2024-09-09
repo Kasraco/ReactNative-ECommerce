@@ -21,25 +21,25 @@ const register = async (req, res) => {
 
     switch (true) {
       case !firstName:
-        res.status(500).json({ message: "firstname is require" });
+        res.json({ error: "firstname is require" });
       case !lastName:
-        res.status(500).json({ message: "lastName is require" });
+        res.json({ error: "lastName is require" });
       case !userName:
-        res.status(500).json({ message: "userName is require" });
+        res.json({ error: "userName is require" });
       case !password:
-        res.status(500).json({ message: "password is require" });
+        res.json({ error: "password is require" });
       case password.length < 6:
         res.status(500).json({ message: "password is tiny" });
       case !email:
-        res.status(500).json({ message: "email is require" });
+        res.json({ error: "email is require" });
       case !phoneNumber:
-        res.status(500).json({ message: "phoneNumber is require" });
+        res.json({ error: "phoneNumber is require" });
       case !address:
-        res.status(500).json({ message: "address is require" });
+        res.json({ error: "address is require" });
     }
 
     if (await existUserName(userName))
-      res.status(500).json({ success: false, message: "username is exist" });
+      res.json({ success: false, error: "username is exist" });
 
     const hashedPassword = await hashPassword.hashPassword(password);
 
@@ -73,22 +73,22 @@ const login = async (req, res) => {
     if (!userName || !password)
       return await res
         .status(204)
-        .json({ success: false, message: "data is empty, please input them" });
+        .json({ success: false, error: "data is empty, please input them" });
 
     const user = await existUserName(userName);
     if (!user) {
-      return await res.status(500).json({
+      return await res.json({
         success: false,
-        message: `the user ${userName} isnot exist`,
+        error: `the user ${userName} isnot exist`,
       });
     }
 
     const matchp = await hashPassword.compairPassword(password, user.password);
 
     if (!matchp) {
-      return await res.status(500).json({
+      return await res.json({
         success: false,
-        message: `password is not true`,
+        error: `password is not true`,
       });
     }
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECURITY, {
