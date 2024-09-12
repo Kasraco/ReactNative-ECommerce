@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
-import Api from "../api";
+import axios, { Axios } from "axios";
+import Cookies from "universal-cookie";
+import Api from "../Api";
 import toast from "react-hot-toast";
 
 const Manager: any = () => {
@@ -15,9 +16,11 @@ const Manager: any = () => {
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("Ahva, Iran");
   const [message, setMessage] = useState("");
-  const [submit, setSubmit] = useState("");
+  const [submit, setSubmit] = useState(false);
   const [error, setError] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  const cookies = new Cookies();
   const handleRegister = async (e: any) => {
     try {
       e.preventDefault();
@@ -58,8 +61,42 @@ const Manager: any = () => {
     }
   };
 
-  const handleLogin = (e) => {
-    console.log("submit");
+  const handleLogin = async (e: any) => {
+    try {
+      e.preventDefault();
+      const configLogin = {
+        method: "POST",
+        url: `${Api}/user/login`,
+        data: {
+          email,
+          password,
+          error,
+          message,
+        },
+      };
+      await axios(configLogin).then((result) => {
+        cookies.set("TOKEN", result.data.token, {
+          path: "/",
+        });
+        console.log(result);
+        const admin = result.data.user.isAdmin;
+
+        if (admin) {
+          setMessage(result.data.message);
+          setSubmit(true);
+
+          result.data.error
+            ? toast.error(<div>{result.data.error}</div>)
+            : toast.success(<div>{result.data.message}</div>);
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -221,6 +258,8 @@ const Manager: any = () => {
                 <input
                   type="email"
                   name="txtEmail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                   placeholder="Enter YourEmail"
                 />
@@ -236,6 +275,8 @@ const Manager: any = () => {
                 <input
                   type="password"
                   name="txtPassword"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2 "
                   placeholder="Enter Your Password"
                 />
