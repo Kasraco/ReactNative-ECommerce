@@ -4,6 +4,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Manager from "./pages/Manager";
 import { Toaster } from "react-hot-toast";
+import MainDashboard from "./components/admin/MainDashboard";
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Manager" element={<Manager />} />
+          <Route path="/dashboard" element={<MainDashboard />} />
         </Routes>
       </BrowserRouter>
     </>
