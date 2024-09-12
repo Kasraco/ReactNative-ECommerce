@@ -42,6 +42,7 @@ const Manager: any = () => {
       };
 
       await axios(config).then((result) => {
+        setSubmit(true);
         setMessage(result.data.message);
 
         result.data.error
@@ -79,19 +80,27 @@ const Manager: any = () => {
           path: "/",
         });
         console.log(result);
-        const admin = result.data.user.isAdmin;
 
-        if (admin) {
-          setMessage(result.data.message);
-          setSubmit(true);
+        if (result.data.success) {
+          const admin = result.data.user.isAdmin;
+          if (admin) {
+            setMessage(result.data.message);
+            setSubmit(true);
 
+            result.data.error
+              ? toast.error(<div>{result.data.error}</div>)
+              : toast.success(<div>{result.data.message}</div>);
+
+            setTimeout(() => {
+              window.location.href = "/dashboard";
+            }, 1000);
+          } else {
+            window.location.href = "/";
+          }
+        } else {
           result.data.error
             ? toast.error(<div>{result.data.error}</div>)
             : toast.success(<div>{result.data.message}</div>);
-
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
         }
       });
     } catch (error) {
@@ -256,7 +265,7 @@ const Manager: any = () => {
                   Email
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   name="txtEmail"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
