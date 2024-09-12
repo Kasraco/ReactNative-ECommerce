@@ -21,21 +21,21 @@ const register = async (req, res) => {
 
     switch (true) {
       case !firstName:
-        res.json({ error: "firstname is require" });
+        res.json({ success: false, error: "firstname is require" });
       case !lastName:
-        res.json({ error: "lastName is require" });
+        res.json({ success: false, error: "lastName is require" });
       case !userName:
-        res.json({ error: "userName is require" });
+        res.json({ success: false, error: "userName is require" });
       case !password:
-        res.json({ error: "password is require" });
+        res.json({ success: false, error: "password is require" });
       case password.length < 6:
-        res.status(500).json({ message: "password is tiny" });
+        res.json({ success: false, error: "password is tiny" });
       case !email:
-        res.json({ error: "email is require" });
+        res.json({ success: false, error: "email is require" });
       case !phoneNumber:
-        res.json({ error: "phoneNumber is require" });
+        res.json({ success: false, error: "phoneNumber is require" });
       case !address:
-        res.json({ error: "address is require" });
+        res.json({ success: false, error: "address is require" });
     }
 
     if (await existUserName(userName))
@@ -66,16 +66,16 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { userName, password } = req.body;
+    const { email, password } = req.body;
 
     //validation
+    if (!email || !password)
+      return await res.json({
+        success: false,
+        error: "data is empty, please input them",
+      });
 
-    if (!userName || !password)
-      return await res
-        .status(204)
-        .json({ success: false, error: "data is empty, please input them" });
-
-    const user = await existUserName(userName);
+    const user = await existUserName(email);
     if (!user) {
       return await res.json({
         success: false,
@@ -114,9 +114,9 @@ const login = async (req, res) => {
   }
 };
 
-const existUserName = async (userName) => {
+const existUserName = async (email) => {
   try {
-    const existUser = await User.findOne({ userName });
+    const existUser = await User.findOne({ email });
     if (existUser == null) return false;
     return existUser;
   } catch (error) {
@@ -138,7 +138,7 @@ const mobileProfile = async (req, res) => {
       user,
     });
   } catch (error) {
-    res.status(400).json("Invalid User");
+    res.json({ success: false, error: "Invalid User" });
   }
 };
 
@@ -159,10 +159,10 @@ const Manager = async (req, res) => {
         user,
       });
     } else {
-      res.status(400).json({ message: "Invalid User" });
+      res.json({ success: false, error: "Invalid User" });
     }
   } catch (error) {
-    res.status(400).json({ message: "Invalid User" });
+    res.json({ success: false, error: "Invalid User" });
   }
 };
 
@@ -173,37 +173,41 @@ const forgetPassword = async (req, res) => {
     //validation
     switch (true) {
       case !userName:
-        return res.json({ message: "username is require" });
+        return res.json({ success: false, error: "username is require" });
       case !oldpassword:
-        return res.json({ message: "oldpassword is require" });
+        return res.json({ success: false, error: "oldpassword is require" });
       case !password:
-        return res.json({ message: "password is require" });
+        return res.json({ success: false, error: "password is require" });
       case !confirmPassword:
-        return res.json({ message: "confirmPassword is require" });
+        return res.json({
+          success: false,
+          error: "confirmPassword is require",
+        });
       case password != confirmPassword:
-        return res.json({ message: "password and confirmPassword not equal" });
+        return res.json({
+          success: false,
+          error: "password and confirmPassword not equal",
+        });
       case password == oldpassword:
-        return res.json({ message: "password and oldpassword is equal" });
+        return res.json({
+          success: false,
+          error: "password and oldpassword is equal",
+        });
     }
     const user = await User.findOne({ userName });
 
-    if (!user)
-      return res
-        .status(404)
-        .json({ succces: false, message: "user not found" });
+    if (!user) return res.json({ success: false, error: "user not found" });
     else {
       const CP = await hashPassword.compairPassword(oldpassword, user.password);
       if (CP) {
         const hashed = await hashPassword.hashPassword(password);
         await User.findByIdAndUpdate(user._id, { password: hashed });
 
-        res
-          .status(201)
-          .json({ success: true, message: "change password success" });
+        res.json({ success: true, message: "change password success" });
       } else {
-        res.status(500).json({
+        res.json({
           success: false,
-          message: "the OldPassword is not equal with current password",
+          error: "the OldPassword is not equal with current password",
         });
       }
     }
@@ -233,9 +237,9 @@ const updateProfile = async (req, res) => {
       result.address = address;
 
       await result.save();
-      res.status(201).json({ success: true, message: "update your profile" });
+      res.json({ success: true, message: "update your profile" });
     }
-    res.status(500).json({ success: false, message: "Your not login" });
+    res.json({ success: false, error: "Your not login" });
   } catch (error) {
     console.log(error);
   }
