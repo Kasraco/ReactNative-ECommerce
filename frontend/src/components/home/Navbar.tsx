@@ -5,7 +5,10 @@ import { MdConnectWithoutContact } from "react-icons/md";
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useState } from "react";
+import Cookies from "universal-cookie";
 const Navbar = () => {
+  const cookies = new Cookies();
+  const token = cookies.get("TOKEN");
   const [responsive, setResponsive]: any = useState(false);
   return (
     <div dir="rtl">
@@ -25,12 +28,16 @@ const Navbar = () => {
                   خانه
                 </a>
               </li>
-              <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
-                <VscAccount className="text-lg" />
-                <a href="/Profile" className="flex items-center">
-                  پروفایل
-                </a>
-              </li>
+              {token ? (
+                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                  <VscAccount className="text-lg" />
+                  <a href="/dashboard" className="flex items-center">
+                    پروفایل
+                  </a>
+                </li>
+              ) : (
+                ""
+              )}
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <MdConnectWithoutContact className="text-lg" />
                 <a href="/Contact" className="flex items-center">
