@@ -36,7 +36,12 @@ const Navbar = () => {
                   </a>
                 </li>
               ) : (
-                ""
+                <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
+                  <VscAccount className="text-lg" />
+                  <a href="/Manager" className="flex items-center">
+                    ورود / عضویت
+                  </a>
+                </li>
               )}
               <li className="flex items-center p-1 text-sm font-medium leading-normal gap-x-2 text-blue-100">
                 <MdConnectWithoutContact className="text-lg" />
