@@ -25,11 +25,11 @@ function App() {
           {/* Categort links */}
           <Route path="/dashboard-category" element={<CategoryIndex />} />
           <Route
-            path="/dashboard-categoryCreate"
+            path="/dashboard-category-create"
             element={<CategoryCreate />}
           />
           <Route
-            path="/dashboard-categoryEdit/:id"
+            path="/dashboard-category-Edit/:id"
             element={<CategoryEdit />}
           />
 
