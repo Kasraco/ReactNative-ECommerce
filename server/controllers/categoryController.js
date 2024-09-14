@@ -8,12 +8,13 @@ const getAll = async (req, res) => {
 const getCate = async (req, res) => {
   try {
     const cateid = req.params.id;
-    if (!cateid) res.status(404).json({ message: "Category ID is missing." });
+    if (!cateid)
+      res.json({ success: false, message: "Category ID is missing." });
 
     const result = await Category.findById(cateid).sort({ categoryAt: -1 });
-    if (!result) res.status(404).json({ message: "Category not found." });
+    if (!result) res.json({ success: false, message: "Category not found." });
 
-    res.status(200).json(result);
+    res.status(200).json({ success: true, message: result });
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +26,7 @@ const addCategory = async (req, res) => {
 
     switch (true) {
       case !title:
-        return res.status(404).json({ error: "title is require" });
+        return res.json({ success: false, message: "title is require" });
     }
 
     const data = await new Category({
@@ -51,7 +52,7 @@ const updateCategory = async (req, res) => {
 
     const result = await Category.findByIdAndUpdate(cateId, updateData);
     if (!result) {
-      res.status(404).json({
+      res.json({
         success: false,
         message: "The requested category could not be found.",
       });
@@ -68,10 +69,11 @@ const updateCategory = async (req, res) => {
 const deleteCate = async (req, res) => {
   try {
     const cateid = req.params.id;
-    if (!cateid) res.status(404).json({ message: "Category ID is missing." });
+    if (!cateid)
+      res.json({ success: false, message: "Category ID is missing." });
 
     const result = await Category.findByIdAndDelete(cateid);
-    if (!result) res.status(404).json({ message: "Category not found." });
+    if (!result) res.json({ success: false, message: "Category not found." });
 
     res.status(200).json({
       success: true,
