@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FcDeleteDatabase, FcEditImage } from "react-icons/fc";
-import Api from "../../../Api";
+import Api from "../../../utils/Api";
 import axios from "axios";
 import Sidebar from "../Sidebar";
 import DataTable from "react-data-table-component";
+import fullDate from "../../../utils/FullTime";
 
 type categories = {
   title: string;
@@ -45,7 +46,7 @@ const CategoryIndex = () => {
     //Define second column
     {
       name: "تاریخ",
-      selector: (row: any) => row.createAt,
+      selector: (row: any) => fullDate(row.createAt),
       sortable: true,
     },
     {
