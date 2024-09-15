@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FcDeleteDatabase, FcEditImage } from "react-icons/fc";
 import Api from "../../../utils/Api";
@@ -10,7 +10,7 @@ import fullDate from "../../../utils/FullTime";
 type categories = {
   title: string;
   mainimg: string;
-  createAt: date;
+  createAt: Date;
   _id: string | undefined;
 };
 const CategoryIndex = () => {
@@ -24,7 +24,7 @@ const CategoryIndex = () => {
     {
       name: "تصویر", // Set Title of Column
       selector: (
-        row: any //set value for column rows
+        row: categories //set value for column rows
       ) => (
         <div className="flex">
           <img
@@ -40,18 +40,18 @@ const CategoryIndex = () => {
     //Define second column
     {
       name: "عنوان",
-      selector: (row: any) => row.title,
+      selector: (row: categories) => row.title,
       sortable: true,
     },
     //Define second column
     {
       name: "تاریخ",
-      selector: (row: any) => fullDate(row.createAt),
+      selector: (row: categories) => fullDate(row.createAt),
       sortable: true,
     },
     {
       name: "عملیات",
-      selector: (row: any) => (
+      selector: (row: categories) => (
         <div className="flex">
           <Link to={`/dashboard-category-edit/${row._id}`}>
             <FcEditImage className="text-2xl m-3" />
@@ -80,7 +80,7 @@ const CategoryIndex = () => {
     fetchData();
   }, []);
 
-  const deleteCategory = async (id: any) => {
+  const deleteCategory = async (id: string) => {
     try {
       const confres = confirm("آیا برای حذف این دسته بندی اطمینان دارید؟");
       if (confres) {
@@ -91,8 +91,8 @@ const CategoryIndex = () => {
     }
   };
 
-  const search = (e: any) => {
-    const newData = filterData.filter((row: any) => {
+  const search = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newData = filterData.filter((row: categories) => {
       console.log(row.title);
       return row.title
         .toLocaleLowerCase()
@@ -125,8 +125,8 @@ const CategoryIndex = () => {
               </Link>
               <div className="container shadow-lg shadow-gray-600 rounded-lg m-2 mt-10 clear-both">
                 <DataTable
-                  direction="rtl"
                   columns={columns}
+                  direction="rtl"                
                   data={data}
                   fixedHeader
                   pagination
