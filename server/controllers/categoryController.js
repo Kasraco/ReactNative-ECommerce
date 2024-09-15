@@ -14,7 +14,9 @@ const getCate = async (req, res) => {
     const result = await Category.findById(cateid).sort({ categoryAt: -1 });
     if (!result) res.json({ success: false, message: "Category not found." });
 
-    res.status(200).json({ success: true, message: result });
+    res.status(200).json({
+      result,
+    });
   } catch (error) {
     console.log(error);
   }
