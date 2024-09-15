@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
-import Api from "../../Api";
+import Api from "../../utils/Api";
 import axios from "axios";
 
 const MainDashboard: any = () => {
