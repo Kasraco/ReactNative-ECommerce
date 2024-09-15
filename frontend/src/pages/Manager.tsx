@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios, { Axios } from "axios";
 import Cookies from "universal-cookie";
-import Api from "../Api";
+import Api from "../utils/Api";
 import toast from "react-hot-toast";
 
 const Manager: any = () => {
