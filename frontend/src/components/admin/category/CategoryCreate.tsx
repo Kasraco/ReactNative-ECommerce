@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import Api from "../../../Api";
+import Api from "../../../utils/Api";
 import toast from "react-hot-toast";
 import Sidebar from "../Sidebar";
 
