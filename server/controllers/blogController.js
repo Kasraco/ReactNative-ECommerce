@@ -29,7 +29,7 @@ const addBlog = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      massage: "blog ${data.title} is save in database",
+      message: `blog ${data.title} is save in database`,
       data,
     });
   } catch (error) {
