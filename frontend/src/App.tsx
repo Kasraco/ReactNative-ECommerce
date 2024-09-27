@@ -11,6 +11,7 @@ import CategoryEdit from "./components/admin/category/CategoryEdit";
 import IndexPost from "./components/admin/posts/IndexPost";
 import CreatePost from "./components/admin/posts/CreatePost";
 import EditPost from "./components/admin/posts/EditPost";
+import IndexUsers from "./components/admin/users/indexUsers";
 function App() {
   return (
     <>
@@ -39,6 +40,10 @@ function App() {
 
           {/* Post links */}
 
+          {/* User links */}
+          <Route path="/dashboard-users" element={<IndexUsers />} />
+
+          {/* User links */}
           {/* Backend dashborad links */}
         </Routes>
       </BrowserRouter>
