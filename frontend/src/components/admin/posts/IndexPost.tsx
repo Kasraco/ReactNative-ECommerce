@@ -66,25 +66,26 @@ const IndexPost = () => {
     },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await axios
-        .get(`${Api}/blog`)
-        .then((result) => {
-          setData(result.data);
+  const fetchData = async () => {
+    try {
+      const result = await axios.get(`${Api}/blog`);
+      setData(result.data);
+      setFilterData(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-          setFilterData(result.data);
-        })
-        .catch((err) => console.log(err));
-    };
+  useEffect(() => {
     fetchData();
-  }, [data]);
+  }, []);
 
   const deletePost = async (id: string) => {
     try {
       const confres = confirm("آیا برای حذف این پست اطمینان دارید؟");
       if (confres) {
         await axios.delete(`${Api}/blog/deleteBlog/${id}`);
+        fetchData(); // Call fetchData after deletion
       }
     } catch (error) {
       console.log(error);
@@ -93,10 +94,8 @@ const IndexPost = () => {
 
   const search = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newData = filterData.filter((row: posts) => {
-      console.log(row.title);
       return row.title.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase());
     });
-
     setData(newData);
   };
 
